@@ -54,8 +54,9 @@ def write_csv_from_dicts(data, header, filename):
     with open(filename, "w") as csv_file:
         dict_writer = csv.DictWriter(csv_file, fieldnames=header)
         dict_writer.writeheader()
-        for row in data:
-            dict_writer.writerow(row)
+        if data:
+            for row in data:
+                dict_writer.writerow(row)
 
 books = []
 bookPage = requests.get(baseUrl + productUrl)

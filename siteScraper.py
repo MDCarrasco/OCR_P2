@@ -7,9 +7,6 @@ headers = ["product_page_url", "universal_product_code", "title",
            "product_description", "category", "review_rating", "image_url"]
 baseUrl = 'http://books.toscrape.com/'
 catalogueUrl = 'catalogue/'
-categoryUrl = 'category/books/sequential-art_5/'
-#categoryUrl = 'category/books/philosophy_7/'
-pageOneUrl = 'page-1.html'
 
 def one():
     return "1/5"
@@ -53,9 +50,9 @@ def construct_book(baseUrl, url, bookPage):
     book["number_available"] = bookInfos[5].getText()[bookInfos[5].getText().find("(")+1:bookInfos[5].getText().find(")")-9]
     return book
 
-def fill_book_dict(category):
-    categorySoup = BeautifulSoup(category.text, 'html.parser')
-    articles = categorySoup.findAll('article')
+def fill_book_dict(currentCat):
+    currentCatSoup = BeautifulSoup(currentCat.text, 'html.parser')
+    articles = currentCatSoup.findAll('article')
     for article in articles:
         a = article.find('a')
         href = a['href'].replace("../", "")
@@ -67,26 +64,28 @@ def write_csv_from_dicts(data, header, filename):
     with open(filename, "w") as csv_file:
         dict_writer = csv.DictWriter(csv_file, fieldnames=header)
         dict_writer.writeheader()
-        for row in data:
-            dict_writer.writerow(row)
+        if data:
+            for row in data:
+                dict_writer.writerow(row)
 
-books = []
 site = requests.get(baseUrl)
 if site.ok:
     siteSoup = BeautifulSoup(site.text, 'html.parser')
-    categories = siteSoup.find('div', attrs={'class': 'side_categories'})
-
-category = requests.get(baseUrl + catalogueUrl + categoryUrl + pageOneUrl)
-if not category.ok:
-    category = requests.get(baseUrl + catalogueUrl + categoryUrl)
-    if category.ok:
-        fill_book_dict(category)
-else:
-    i = 2
-    while category.ok:
-        fill_book_dict(category)
-        pageOneUrl = pageOneUrl[:5] + str(i) + pageOneUrl[6:]
-        category = requests.get(baseUrl + catalogueUrl + categoryUrl + pageOneUrl)
-        i += 1
-
-write_csv_from_dicts(books, headers, "category.csv")
+    categories = siteSoup.find('div', attrs={'class': 'side_categories'}).findAll('a')
+    categories.pop(0)
+    for category in categories:
+        books = []
+        pageOneUrl = 'page-1.html'
+        currentCat = requests.get(baseUrl + category['href'][:-10] + pageOneUrl)
+        if not currentCat.ok:
+            currentCat = requests.get(baseUrl + category['href'])
+            if currentCat.ok:
+                fill_book_dict(currentCat)
+        else:
+            i = 2
+            while currentCat.ok:
+                fill_book_dict(currentCat)
+                pageOneUrl = pageOneUrl[:5] + str(i) + pageOneUrl[6:]
+                currentCat = requests.get(baseUrl + category['href'][:-10] + pageOneUrl)
+                i += 1
+        write_csv_from_dicts(books, headers, category.text.strip() + ".csv")

@@ -7,7 +7,8 @@ headers = ["product_page_url", "universal_product_code", "title",
            "product_description", "category", "review_rating", "image_url"]
 baseUrl = 'http://books.toscrape.com/'
 catalogueUrl = 'catalogue/'
-categoryUrl = 'category/books/sequential-art_5/'
+#categoryUrl = 'category/books/sequential-art_5/'
+categoryUrl = 'category/books/food-and-drink_33/'
 #categoryUrl = 'category/books/philosophy_7/'
 pageOneUrl = 'page-1.html'
 
@@ -67,8 +68,9 @@ def write_csv_from_dicts(data, header, filename):
     with open(filename, "w") as csv_file:
         dict_writer = csv.DictWriter(csv_file, fieldnames=header)
         dict_writer.writeheader()
-        for row in data:
-            dict_writer.writerow(row)
+        if data:
+            for row in data:
+                dict_writer.writerow(row)
 
 books = []
 category = requests.get(baseUrl + catalogueUrl + categoryUrl + pageOneUrl)
