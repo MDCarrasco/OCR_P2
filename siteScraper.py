@@ -50,6 +50,12 @@ def construct_book(baseUrl, url, bookPage):
     book["number_available"] = bookInfos[5].getText()[bookInfos[5].getText().find("(")+1:bookInfos[5].getText().find(")")-9]
     return book
 
+def download_book_img(book):
+    img = requests.get(book["image_url"])
+    file = open("./img/" + book["title"].replace("/", "  ") + ".jpg", "wb")
+    file.write(img.content)
+    file.close()
+
 def fill_book_dict(currentCat):
     currentCatSoup = BeautifulSoup(currentCat.text, 'html.parser')
     articles = currentCatSoup.findAll('article')
@@ -58,7 +64,9 @@ def fill_book_dict(currentCat):
         href = a['href'].replace("../", "")
         bookPage = requests.get(baseUrl + catalogueUrl + href)
         if bookPage.ok:
-            books.append(construct_book(baseUrl, baseUrl + catalogueUrl + href, bookPage))
+            book = construct_book(baseUrl, baseUrl + catalogueUrl + href, bookPage)
+            download_book_img(book)
+            books.append(book)
 
 def write_csv_from_dicts(data, header, filename):
     with open(filename, "w") as csv_file:
@@ -88,4 +96,4 @@ if site.ok:
                 pageOneUrl = pageOneUrl[:5] + str(i) + pageOneUrl[6:]
                 currentCat = requests.get(baseUrl + category['href'][:-10] + pageOneUrl)
                 i += 1
-        write_csv_from_dicts(books, headers, category.text.strip() + ".csv")
+        write_csv_from_dicts(books, headers, "./csv/" + category.text.strip() + ".csv")

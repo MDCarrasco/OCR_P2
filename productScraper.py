@@ -50,6 +50,12 @@ def construct_book(baseUrl, url, bookPage):
     book["number_available"] = bookInfos[5].getText()[bookInfos[5].getText().find("(")+1:bookInfos[5].getText().find(")")-9]
     return book
 
+def download_book_img(book):
+    img = requests.get(book["image_url"])
+    file = open("./img/" + book["title"] + ".jpg", "wb")
+    file.write(img.content)
+    file.close()
+
 def write_csv_from_dicts(data, header, filename):
     with open(filename, "w") as csv_file:
         dict_writer = csv.DictWriter(csv_file, fieldnames=header)
@@ -61,5 +67,7 @@ def write_csv_from_dicts(data, header, filename):
 books = []
 bookPage = requests.get(baseUrl + productUrl)
 if bookPage.ok:
-    books.append(construct_book(baseUrl, baseUrl + productUrl, bookPage))
-write_csv_from_dicts(books, headers, "product.csv")
+    book = construct_book(baseUrl, baseUrl + productUrl, bookPage)
+    download_book_img(book)
+    books.append(book)
+write_csv_from_dicts(books, headers, "./csv/product.csv")
