@@ -6,8 +6,7 @@ headers = ["product_page_url", "universal_product_code", "title",
            "price_including_tax", "price_excluding_tax", "number_available",
            "product_description", "category", "review_rating", "image_url"]
 baseUrl = 'http://books.toscrape.com/'
-catalogueUrl = 'catalogue/'
-categoryUrl = 'category/books/science-fiction_16/'
+productUrl = 'catalogue/ready-player-one_209/index.html'
 
 def one():
     return "1/5"
@@ -32,7 +31,7 @@ def rating_switch(rating):
     func = switcher.get(rating, "Not rated")
     return func()
 
-def construct_book(baseUrl, url):
+def construct_book(baseUrl, url, bookPage):
     book = dict.fromkeys(["product_page_url", "universal_product_code", "title",
     "price_including_tax", "price_excluding_tax", "number_available",
     "product_description", "category", "review_rating", "image_url"])
@@ -59,14 +58,7 @@ def write_csv_from_dicts(data, header, filename):
             dict_writer.writerow(row)
 
 books = []
-category = requests.get(baseUrl + catalogueUrl + categoryUrl)
-if category.ok:
-    categorySoup = BeautifulSoup(category.text, 'html.parser')
-    articles = categorySoup.findAll('article')
-    for article in articles:
-        a = article.find('a')
-        href = a['href'].replace("../", "")
-        bookPage = requests.get(baseUrl + catalogueUrl + href)
-        if bookPage.ok:
-            books.append(construct_book(baseUrl, baseUrl + catalogueUrl + href))
-write_csv_from_dicts(books, headers, "result.csv")
+bookPage = requests.get(baseUrl + productUrl)
+if bookPage.ok:
+    books.append(construct_book(baseUrl, baseUrl + productUrl, bookPage))
+write_csv_from_dicts(books, headers, "product.csv")
