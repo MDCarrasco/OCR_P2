@@ -1,7 +1,10 @@
+import time
+import concurrent.futures
 import csv
 import requests
 from bs4 import BeautifulSoup
 
+MAX_THREADS = 30
 headers = ["product_page_url", "universal_product_code", "title",
            "price_including_tax", "price_excluding_tax", "number_available",
            "product_description", "category", "review_rating", "image_url"]
@@ -36,7 +39,7 @@ def construct_book(baseUrl, url, bookPage):
     "price_including_tax", "price_excluding_tax", "number_available",
     "product_description", "category", "review_rating", "image_url"])
     book["product_page_url"] = url
-    bookSoup = BeautifulSoup(bookPage.text, 'html.parser')
+    bookSoup = BeautifulSoup(bookPage.content, 'html.parser')
     book["title"] = bookSoup.find('h1').text
     book["product_description"] = bookSoup.find('meta', attrs={'name': 'description'})["content"].strip()
     book["category"] = bookSoup.find('ul', attrs={'class': 'breadcrumb'}).findAll('li')[2].text.strip()
@@ -56,7 +59,7 @@ def download_book_img(book):
     file.write(img.content)
     file.close()
 
-def fill_book_dict(currentCat):
+def fill_book_dict(currentCat, books):
     currentCatSoup = BeautifulSoup(currentCat.text, 'html.parser')
     articles = currentCatSoup.findAll('article')
     for article in articles:
@@ -76,24 +79,34 @@ def write_csv_from_dicts(data, header, filename):
             for row in data:
                 dict_writer.writerow(row)
 
-site = requests.get(baseUrl)
-if site.ok:
-    siteSoup = BeautifulSoup(site.text, 'html.parser')
-    categories = siteSoup.find('div', attrs={'class': 'side_categories'}).findAll('a')
-    categories.pop(0)
-    for category in categories:
-        books = []
-        pageOneUrl = 'page-1.html'
-        currentCat = requests.get(baseUrl + category['href'][:-10] + pageOneUrl)
-        if not currentCat.ok:
-            currentCat = requests.get(baseUrl + category['href'])
-            if currentCat.ok:
-                fill_book_dict(currentCat)
-        else:
-            i = 2
-            while currentCat.ok:
-                fill_book_dict(currentCat)
-                pageOneUrl = pageOneUrl[:5] + str(i) + pageOneUrl[6:]
-                currentCat = requests.get(baseUrl + category['href'][:-10] + pageOneUrl)
-                i += 1
-        write_csv_from_dicts(books, headers, "./csv/" + category.text.strip() + ".csv")
+def scrap_category(category):
+    books = []
+    pageOneUrl = 'page-1.html'
+    currentCat = requests.get(baseUrl + category['href'][:-10] + pageOneUrl)
+    if not currentCat.ok:
+        currentCat = requests.get(baseUrl + category['href'])
+        if currentCat.ok:
+            fill_book_dict(currentCat, books)
+    else:
+        i = 2
+        while currentCat.ok:
+            fill_book_dict(currentCat, books)
+            pageOneUrl = pageOneUrl[:5] + str(i) + pageOneUrl[6:]
+            currentCat = requests.get(baseUrl + category['href'][:-10] + pageOneUrl)
+            i += 1
+    write_csv_from_dicts(books, headers, "./csv/" + category.text.strip() + ".csv")
+
+def scrap_site():
+    site = requests.get(baseUrl)
+    if site.ok:
+        siteSoup = BeautifulSoup(site.text, 'html.parser')
+        categories = siteSoup.find('div', attrs={'class': 'side_categories'}).findAll('a')
+        categories.pop(0)
+        threads = min(MAX_THREADS, len(categories))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+            executor.map(scrap_category, categories)
+
+t0 = time.time()
+scrap_site()
+t1 = time.time()
+print(f"{t1-t0} seconds.")

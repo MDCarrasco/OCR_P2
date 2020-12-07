@@ -40,7 +40,7 @@ def construct_book(baseUrl, url, bookPage):
     "price_including_tax", "price_excluding_tax", "number_available",
     "product_description", "category", "review_rating", "image_url"])
     book["product_page_url"] = url
-    bookSoup = BeautifulSoup(bookPage.text, 'html.parser')
+    bookSoup = BeautifulSoup(bookPage.content, 'html.parser')
     book["title"] = bookSoup.find('h1').text
     book["product_description"] = bookSoup.find('meta', attrs={'name': 'description'})["content"].strip()
     book["category"] = bookSoup.find('ul', attrs={'class': 'breadcrumb'}).findAll('li')[2].text.strip()
