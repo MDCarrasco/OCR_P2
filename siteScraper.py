@@ -52,7 +52,7 @@ def construct_book(baseUrl, url, bookPage):
 
 def download_book_img(book):
     img = requests.get(book["image_url"])
-    file = open("./img/" + book["title"].replace("/", "  ") + ".jpg", "wb")
+    file = open("./img/" + ''.join(e for e in book["title"] if e.isalnum()) + ".jpg", "wb")
     file.write(img.content)
     file.close()
 

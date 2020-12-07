@@ -6,7 +6,8 @@ headers = ["product_page_url", "universal_product_code", "title",
            "price_including_tax", "price_excluding_tax", "number_available",
            "product_description", "category", "review_rating", "image_url"]
 baseUrl = 'http://books.toscrape.com/'
-productUrl = 'catalogue/ready-player-one_209/index.html'
+#productUrl = 'catalogue/ready-player-one_209/index.html'
+productUrl = 'catalogue/salt_731/index.html'
 
 def one():
     return "1/5"
@@ -52,7 +53,7 @@ def construct_book(baseUrl, url, bookPage):
 
 def download_book_img(book):
     img = requests.get(book["image_url"])
-    file = open("./img/" + book["title"] + ".jpg", "wb")
+    file = open("./img/" + ''.join(e for e in book["title"] if e.isalnum()) + ".jpg", "wb")
     file.write(img.content)
     file.close()
 
