@@ -46,4 +46,16 @@ The dictionnary filler then proceeds to do the scraping of every data we need to
 8. Price_including_tax
 9. Number_available
 
-Each time a book page is scrapped, a copy of the corresponding .jpg file is downloaded into the "img" folder. Then, the script writes row by row (that is book by book) into the category's csv file named after it into the "csv" folder. 
+Each time a book page is scrapped, a copy of the corresponding .jpg file is downloaded into the "img" folder. Then, the script writes row by row (that is book by book) into the category's csv file named after it into the "csv" folder.
+
+### File naming procedure
+
+- jpg files
+The script keeps only alphanumeric characters from the "title" value of a book and uses that string to set the filename.
+- csv files
+The script uses the category name (spaces included) to set the filename.
+
+### Multithreading
+
+The script uses the package `concurrent.futures` to create an object of type `ThreadPoolExecutor` with the worker amount set to 30 or to the number of categories to be scraped if lower. Each worker thread then executes the scraping for a category, any idle worker takes on another category until there is none left.
+More on it here : https://docs.python.org/3/library/concurrent.futures.html and there : https://wiki.python.org/moin/GlobalInterpreterLock
