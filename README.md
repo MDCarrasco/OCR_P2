@@ -29,10 +29,10 @@ We made sure of popping out the unwanted first link aka "Books" as we want to be
 
 Category scraping starts by checking if the category has multiple pages or not and then calling a dictionnary filler on every book url in the category's page or pages. 
 Below, an example of a book page url inside a category's page:
-<img width="956" alt="CategoryBookLink" src="https://user-images.githubusercontent.com/50454011/101606412-a86d9980-3a03-11eb-8c99-a3e63c4b5c47.png">
+> <img width="956" alt="CategoryBookLink" src="https://user-images.githubusercontent.com/50454011/101606412-a86d9980-3a03-11eb-8c99-a3e63c4b5c47.png">
 
-The dictionnary filler then proceeds to do the scraping of every data we need to be seeing in the csv file
-<img width="956" alt="BookPage" src="https://user-images.githubusercontent.com/50454011/101608958-ac4eeb00-3a06-11eb-81e6-e76bd911ce66.png">
+The dictionnary filler then proceeds to do the scraping of every data we need to be seeing in the csv file:
+> <img width="956" alt="BookPage" src="https://user-images.githubusercontent.com/50454011/101608958-ac4eeb00-3a06-11eb-81e6-e76bd911ce66.png">
 
 - Caption/CSV headers
 0. Product_page_url
