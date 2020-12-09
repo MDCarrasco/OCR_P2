@@ -21,3 +21,4 @@ Project contains two folders named "img" and "csv", after the scraping process i
 
 ## How it works
 
+<img width="956" alt="HomeCategories" src="https://user-images.githubusercontent.com/50454011/101605744-da323080-3a02-11eb-9576-e61b5487dda4.png">
