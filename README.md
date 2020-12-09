@@ -18,3 +18,6 @@ pip install -r ./requirements.txt
 python ./siteScraper.py
 ```
 Project contains two folders named "img" and "csv", after the scraping process is complete those folders will be filled with .jpg files and .csv files respectively.
+
+## How it works
+
