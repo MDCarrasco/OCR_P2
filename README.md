@@ -25,4 +25,4 @@ Project contains two folders named "img" and "csv", after the scraping process i
 
 <img width="956" alt="CategoryBookLink" src="https://user-images.githubusercontent.com/50454011/101606412-a86d9980-3a03-11eb-8c99-a3e63c4b5c47.png">
 
-<img width="956" alt="BookPage" src="https://user-images.githubusercontent.com/50454011/101608692-55491600-3a06-11eb-9b03-91e742bceb61.png">
+<img width="956" alt="BookPage" src="https://user-images.githubusercontent.com/50454011/101608958-ac4eeb00-3a06-11eb-81e6-e76bd911ce66.png">
