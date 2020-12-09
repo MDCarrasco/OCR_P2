@@ -48,8 +48,8 @@ def construct_book(baseUrl, url, bookPage):
     book["review_rating"] = rating_switch(rating)
     bookInfos = bookSoup.findAll('td')
     book["universal_product_code"] = bookInfos[0].getText()
-    book["price_including_tax"] = bookInfos[2].getText()[1:]
     book["price_excluding_tax"] = bookInfos[3].getText()[1:]
+    book["price_including_tax"] = bookInfos[2].getText()[1:]
     book["number_available"] = bookInfos[5].getText()[bookInfos[5].getText().find("(")+1:bookInfos[5].getText().find(")")-9]
     return book
 
@@ -94,6 +94,7 @@ def scrap_category(category):
             pageOneUrl = pageOneUrl[:5] + str(i) + pageOneUrl[6:]
             currentCat = requests.get(baseUrl + category['href'][:-10] + pageOneUrl)
             i += 1
+    print("Started writing " + category.text.strip() + ".csv")
     write_csv_from_dicts(books, headers, "./csv/" + category.text.strip() + ".csv")
 
 def scrap_site():
@@ -103,7 +104,8 @@ def scrap_site():
         categories = siteSoup.find('div', attrs={'class': 'side_categories'}).findAll('a')
         categories.pop(0)
         threads = min(MAX_THREADS, len(categories))
-        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        with concurrent.futures.ThreadPoolExecutor( max_workers=min(MAX_THREADS, \
+        len(categories))) as executor:
             executor.map(scrap_category, categories)
 
 t0 = time.time()
