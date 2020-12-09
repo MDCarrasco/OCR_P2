@@ -35,13 +35,13 @@ The dictionnary filler then proceeds to do the scraping of every data we need to
 <img width="956" alt="BookPage" src="https://user-images.githubusercontent.com/50454011/101608958-ac4eeb00-3a06-11eb-81e6-e76bd911ce66.png">
 
 - Caption/CSV headers
-0 Product_page_url
-1 Title
-2 Product_description
-3 Category
-4 Image_url
-5 Review_rating
-6 Universal_product_code
-7 Price_excluding_tax
-8 Price_including_tax
-9 Number_available
+0. Product_page_url
+1. Title
+2. Product_description
+3. Category
+4. Image_url
+5. Review_rating
+6. Universal_product_code
+7. Price_excluding_tax
+8. Price_including_tax
+9. Number_available
