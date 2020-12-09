@@ -1,6 +1,7 @@
 # OCR_P2
 
 OpenClassrooms' Python Project 2 is a small web scraper with multithreading that goes site->categories->books into a CSV file.
+
 For a full scrap of http://books.toscrape.com multithreading makes it 7x faster ! (14min before vs 2 min with multithreading).
 
 ## Installation
