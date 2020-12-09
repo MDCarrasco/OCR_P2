@@ -31,7 +31,7 @@ Category scraping starts by checking if the category has multiple pages or not a
 Below, an example of a book page url inside a category's page:
 > <img width="956" alt="CategoryBookLink" src="https://user-images.githubusercontent.com/50454011/101606412-a86d9980-3a03-11eb-8c99-a3e63c4b5c47.png">
 
-The dictionnary filler then proceeds to do the scraping of every data we need to be seeing in the csv file:
+The dictionnary filler then proceeds to do the scraping of every data we need to be seeing in the csv file from every book page one by one. Again, example below:
 > <img width="956" alt="BookPage" src="https://user-images.githubusercontent.com/50454011/101608958-ac4eeb00-3a06-11eb-81e6-e76bd911ce66.png">
 
 - Caption/CSV headers
@@ -45,3 +45,5 @@ The dictionnary filler then proceeds to do the scraping of every data we need to
 7. Price_excluding_tax
 8. Price_including_tax
 9. Number_available
+
+Each time a book page is scrapped, a copy of the corresponding .jpg file is downloaded into the "img" folder. Then, the script writes row by row (that is book by book) into the category's csv file named after it into the "csv" folder. 
