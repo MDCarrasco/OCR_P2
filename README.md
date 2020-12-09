@@ -22,7 +22,7 @@ Project contains two folders named "img" and "csv", after the scraping process i
 ## How it works
 
 If books.toscrape.com is accessible, the script starts by getting all the categories listed in the left side div as shown in the following screenshot:
-<img width="956" alt="HomeCategories" src="https://user-images.githubusercontent.com/50454011/101605744-da323080-3a02-11eb-9576-e61b5487dda4.png">
+> <img width="956" alt="HomeCategories" src="https://user-images.githubusercontent.com/50454011/101605744-da323080-3a02-11eb-9576-e61b5487dda4.png">
 
 Now we got a list with all the categories. 
 We made sure of popping out the unwanted first link aka "Books" as we want to be able to create a CSV file per category so we have to navigate through each and every one of those individually (that is where the multithreading happens by the way).
