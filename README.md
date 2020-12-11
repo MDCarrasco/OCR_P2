@@ -8,6 +8,7 @@ For a full scrap of http://books.toscrape.com multithreading makes it 7x faster 
 
 ```bash
 python -m venv env
+source ./env/bin/activate
 pip install -r ./requirements.txt
 ```
 
